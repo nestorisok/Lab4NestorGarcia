@@ -5,8 +5,14 @@
 #include <cstdlib> //for atoi()
 #include <iostream>
 
+#include <list>
+
 #include <string>
+#include <vector>
 #include <fstream> // file reading
+
+#include <sstream>
+
 
 using namespace std;
 
@@ -14,29 +20,78 @@ using namespace std;
 
 int exp(), term(), fact(), exp2(int), term2(int), fact2(int), Num();
 
-//ifstream fin;
+int word(string);
+
+
+void Declarations();
+
+void Declarations()
+{
+
+
+}
+
+
+
 string prog; //string for reading 1-line input expression (program)
 int indexx = 0; //global index for program string
 
+const int mySize = 100;
+
+// SYMBOL TABLE
+struct node
+{
+	char id;
+	string type;
+	int val;
+	
+
+};
+node* symbolTable[mySize];
+//
+
 int main(int argc, const char** argv)
 {
+
+
+
 	char ch;
+	string line;
+
 
 	ifstream myfile;
 	myfile.open("myProg.txt");
 
-
-	while (myfile.get(ch)) {
-		prog += ch;
+	while (getline(myfile, line)) {
+		prog += line;
 	}
 
 	myfile.close();
+
+	cout << word("test");
+
+	// Works to look for word
+	////istringstream iss(prog);
+	////string word;
+	////while (iss >> word)
+	////{
+	////	string wordToFind = "test";
+
+	////	if (word == wordToFind)
+	////	{
+	////		cout << "tesetstststs" << endl;
+	////	}
+	////}
+
+	//cout << prog.find("test");
+
+ 	//cout << word(prog) << endl;
 
 	cout << "\nEquation = " << prog << endl;
 	cout << "\nResult = " << exp() << endl;
 
 
-}
+ }
 
 // exp() returns value from exp2(term())
 int exp()		// exp: tail-end recursion to call our non-terminals
@@ -188,7 +243,31 @@ int Num()
 		return num;  // Return the multi-digit number
 	}
 
+
+
+
 	return atoi(&a);
 
 
+}
+
+
+int word(string inpString) 
+{
+
+	// Works to look for word
+	istringstream iss(prog);
+	string word;
+	while (iss >> word)
+	{
+		string wordToFind = inpString;
+
+		if (word == wordToFind)
+		{
+			indexx = prog.find(wordToFind) + wordToFind.length();
+			break;
+		}
+	}
+
+	return indexx;
 }
