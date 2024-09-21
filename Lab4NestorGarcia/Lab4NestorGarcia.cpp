@@ -171,6 +171,22 @@ int Num()
 
 	}
 
+	if (isdigit(a))
+	{
+	
+
+		int num = a - '0';  // using ascii values to get num
+		
+		while (indexx < prog.length() && isdigit(prog.at(indexx)))
+		{
+
+			num = num * 10 + (prog.at(indexx++) - '0');  // Multiplying our initial num by 10 to move numbers place
+			//cout << num << endl;
+
+		}
+
+		return num;  // Return the multi-digit number
+	}
 
 	return atoi(&a);
 
