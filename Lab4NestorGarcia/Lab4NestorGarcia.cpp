@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 #include <fstream> // file reading
-
+#include <unordered_map>
 #include <sstream>
 
 
@@ -22,67 +22,86 @@ int exp(), term(), fact(), exp2(int), term2(int), fact2(int), Num();
 
 //int word(string);
 
-void word(string);
+void wordFound(string);
 
 void Declarations();
+void Declaration(string);
+
+void myWord();
+int myChar();
 
 
+string prog;
+string curWord; //string for reading 1-line input expression (program)
 
 
-
-string prog, curWord; //string for reading 1-line input expression (program)
 int indexx = 0; //global index for program string
+int tableIn = 0;
 
+
+// SYMBOL TABLE	//
 const int mySize = 100;
-
-// SYMBOL TABLE
-struct node
+struct symbolTable
 {
 	char id;
 	string type;
 	int val;
 	
+	symbolTable();
 
 };
-node* symbolTable[mySize];
-//
+unordered_map<int, symbolTable> myTable;
 
-int main(int argc, const char** argv)
+
+/***************************/
+
+void fileReading()
 {
-
-
-
-	char ch;
 	string line;
-
-
 	ifstream myfile;
 	myfile.open("myProg.txt");
 
 	while (getline(myfile, line)) {
-		prog += line;
+		prog += line + " ";
 
 	}
 
 	myfile.close();
-	istringstream iss(prog);
+}
 
-	iss >> curWord;
-	if(curWord == "program")
-	{ 
+//void nextWord(istringstream iss(string));
 
 
+
+
+
+
+int main(int argc, const char** argv)
+{
+	
+
+	fileReading();
+
+	myWord();
+	if (curWord == "program")
+	{
+		Declarations();
 	}
-	////iss >> curWord; // checks word
-	////cout << curWord << endl;
-	////iss >> curWord;
-	////cout << curWord << endl;
-
-	cout << "\nEquation = " << prog << endl;
-	cout << "\nResult = " << exp() << endl;
-
+	else
+	{
+		cout << "Error" << endl; // Make proper error
+		exit(1);
+	}
 
  }
+
+
+
+
+
+
+
+
 
 // exp() returns value from exp2(term())
 int exp()		// exp: tail-end recursion to call our non-terminals
@@ -245,67 +264,105 @@ int Num()
 
 void Declarations()
 {
+	myWord();
+	if (curWord == "begin")
+	{
+		exit(1);
+	}
+	else if (curWord == "int" || curWord == "double")
+	{
+		Declaration(curWord);
+	}
+
+	Declarations();
+}
+
+void Declaration(string inpWord) 
+{
+	string varType = inpWord;
+
+
+	char curChar = prog.at(indexx++);
+	while (curChar == ' ' && (indexx < prog.length()))
+	{
+		curChar = prog.at(indexx++);
+	}
+
+	myTable[tableIn].id = curChar;
+	myTable[tableIn].type = varType;
+	tableIn++;
+
+	if (prog.at(indexx++) == ',')
+	{
+		Declaration(varType);
+
+	}
+	else if (prog.at(indexx++) == ';')
+	{
+		exit(1);
+	}
+
+	////if(prog.at(indexx++) == ',')
+	////{
+	////	myTable[tableIn].id = curChar;
+	////	myTable[tableIn].type = varType;
+	////	tableIn++;
+	////}
+	////else if (prog.at(indexx++) == ';')
+	////{
+	////	exit(1);
+	////}
 
 
 }
 
-//void word() 
-//{
-//
-//	// Works to look for word
-//	istringstream iss(prog);
-//	//string word;
-//	while (iss >> curWord)
-//	{
-//		//string wordToFind = inpString;
-//
-//		if (curWord)
-//		{
-//			indexx = prog.find(wordToFind) + wordToFind.length();
-//		}
-//
-//	}
-//
-//}
 
-////bool word(string strInp)
-////{
-////	int temp = 0;
-////
-////	if (temp < strInp.length())
-////	{
-////		while (prog.at(indexx) == strInp.at(temp))
-////		{
-////			indexx++;
-////			temp++;
-////
-////		}
-////
-////	}
-////
-////	return indexx;
-////
-////}
+void myWord()
+{
+
+	//char a = prog.at(indexx++);
+	
+	string tempString;
+
+	while (prog.at(indexx) == ' ' && (indexx < prog.length()))
+	{
+		indexx++;
+	}
+
+	if (isalpha(prog.at(indexx)))
+	{
+		while (indexx < prog.length() && isalpha(prog.at(indexx)))
+		{
+
+			tempString += prog.at(indexx++);  // Multiplying our initial num by 10 to move numbers place
+			//cout << num << endl;
+
+		}
+		curWord = tempString;
+	}
+
+
+}
 
 
 
-////
-////int word(string inpString) 
-////{
-////
-////	// Works to look for word
-////	istringstream iss(prog);
-////	string word;
-////	while (iss >> word)
-////	{
-////		string wordToFind = inpString;
-////
-////		if (word == wordToFind)
-////		{
-////			indexx = prog.find(wordToFind) + wordToFind.length();
-////			break;
-////		}
-////	}
-////
-////	return indexx;
-////}
+int myChar()
+{
+
+	char a = prog.at(indexx++); //get one chr from program string
+	while (a == ' ' && (indexx < prog.length()))
+	{
+		a = prog.at(indexx++);
+	}
+	return atoi(&a); //converts a char to a numeric number and return
+
+
+}
+
+/****************************************************************/
+symbolTable::symbolTable()
+{
+	id = '\\';
+	type = "EMPTY";
+	val = -1;
+}
