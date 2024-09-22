@@ -62,7 +62,7 @@ void fileReading()
 	myfile.open("myProg.txt");
 
 	while (getline(myfile, line)) {
-		prog += line + " ";
+		prog += line + " ";	// This allows us to seperate program instructions by spaces to make it readable with code
 
 	}
 
@@ -302,18 +302,6 @@ void Declaration(string inpWord)
 		exit(1);
 	}
 
-	////if(prog.at(indexx++) == ',')
-	////{
-	////	myTable[tableIn].id = curChar;
-	////	myTable[tableIn].type = varType;
-	////	tableIn++;
-	////}
-	////else if (prog.at(indexx++) == ';')
-	////{
-	////	exit(1);
-	////}
-
-
 }
 
 
@@ -360,7 +348,7 @@ int myChar()
 }
 
 /****************************************************************/
-symbolTable::symbolTable()
+symbolTable::symbolTable()	// Constructor for our symbol table
 {
 	id = '\\';
 	type = "EMPTY";
