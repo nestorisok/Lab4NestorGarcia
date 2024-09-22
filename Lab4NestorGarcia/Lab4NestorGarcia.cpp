@@ -350,7 +350,8 @@ int myChar()
 /****************************************************************/
 symbolTable::symbolTable()	// Constructor for our symbol table
 {
-	id = '\\';
+	// Defaults
+	id = '0';
 	type = "EMPTY";
 	val = -1;
 }
