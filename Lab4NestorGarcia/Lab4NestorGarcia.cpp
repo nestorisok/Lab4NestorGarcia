@@ -20,20 +20,17 @@ using namespace std;
 
 int exp(), term(), fact(), exp2(int), term2(int), fact2(int), Num();
 
-int word(string);
+//int word(string);
 
+void word(string);
 
 void Declarations();
 
-void Declarations()
-{
-
-
-}
 
 
 
-string prog; //string for reading 1-line input expression (program)
+
+string prog, curWord; //string for reading 1-line input expression (program)
 int indexx = 0; //global index for program string
 
 const int mySize = 100;
@@ -64,28 +61,22 @@ int main(int argc, const char** argv)
 
 	while (getline(myfile, line)) {
 		prog += line;
+
 	}
 
 	myfile.close();
+	istringstream iss(prog);
 
-	cout << word("test");
+	iss >> curWord;
+	if(curWord == "program")
+	{ 
 
-	// Works to look for word
-	////istringstream iss(prog);
-	////string word;
-	////while (iss >> word)
-	////{
-	////	string wordToFind = "test";
 
-	////	if (word == wordToFind)
-	////	{
-	////		cout << "tesetstststs" << endl;
-	////	}
-	////}
-
-	//cout << prog.find("test");
-
- 	//cout << word(prog) << endl;
+	}
+	////iss >> curWord; // checks word
+	////cout << curWord << endl;
+	////iss >> curWord;
+	////cout << curWord << endl;
 
 	cout << "\nEquation = " << prog << endl;
 	cout << "\nResult = " << exp() << endl;
@@ -252,22 +243,69 @@ int Num()
 }
 
 
-int word(string inpString) 
+void Declarations()
 {
 
-	// Works to look for word
-	istringstream iss(prog);
-	string word;
-	while (iss >> word)
-	{
-		string wordToFind = inpString;
 
-		if (word == wordToFind)
-		{
-			indexx = prog.find(wordToFind) + wordToFind.length();
-			break;
-		}
-	}
-
-	return indexx;
 }
+
+//void word() 
+//{
+//
+//	// Works to look for word
+//	istringstream iss(prog);
+//	//string word;
+//	while (iss >> curWord)
+//	{
+//		//string wordToFind = inpString;
+//
+//		if (curWord)
+//		{
+//			indexx = prog.find(wordToFind) + wordToFind.length();
+//		}
+//
+//	}
+//
+//}
+
+////bool word(string strInp)
+////{
+////	int temp = 0;
+////
+////	if (temp < strInp.length())
+////	{
+////		while (prog.at(indexx) == strInp.at(temp))
+////		{
+////			indexx++;
+////			temp++;
+////
+////		}
+////
+////	}
+////
+////	return indexx;
+////
+////}
+
+
+
+////
+////int word(string inpString) 
+////{
+////
+////	// Works to look for word
+////	istringstream iss(prog);
+////	string word;
+////	while (iss >> word)
+////	{
+////		string wordToFind = inpString;
+////
+////		if (word == wordToFind)
+////		{
+////			indexx = prog.find(wordToFind) + wordToFind.length();
+////			break;
+////		}
+////	}
+////
+////	return indexx;
+////}
