@@ -31,7 +31,7 @@ void myWord();
 int myChar();
 
 
-string prog;
+string prog,tempString;
 string curWord; //string for reading 1-line input expression (program)
 
 
@@ -53,23 +53,25 @@ struct symbolTable
 unordered_map<int, symbolTable> myTable;
 
 
-/***************************/
+/////***************************/
+////
+////void fileReading()
+////{
+////	string line;
+////	ifstream myfile;
+////	myfile.open("myProg.txt");
+////
+////	while (getline(myfile, line)) {
+////		prog += line + " ";	// This allows us to seperate program instructions by spaces to make it readable with code
+////
+////	}
+////
+////	myfile.close();
+////}
+////
+//////void nextWord(istringstream iss(string));
 
-void fileReading()
-{
-	string line;
-	ifstream myfile;
-	myfile.open("myProg.txt");
-
-	while (getline(myfile, line)) {
-		prog += line + " ";	// This allows us to seperate program instructions by spaces to make it readable with code
-
-	}
-
-	myfile.close();
-}
-
-//void nextWord(istringstream iss(string));
+ifstream myfile;
 
 
 
@@ -79,8 +81,19 @@ void fileReading()
 int main(int argc, const char** argv)
 {
 	
+	myfile.open("myProg.txt");
+	//getline(myfile, s1);
+	while (getline(myfile, tempString))
+	{
+		prog += tempString + ' '; // fix this
+	}
 
-	fileReading();
+	////getline(myfile, tempString);   //read one line  
+	////while (!myfile.eof())
+	////{
+	////	prog += tempString;
+	////	getline(myfile, tempString); //read next line
+	////}
 
 	myWord();
 	if (curWord == "program")
@@ -92,6 +105,10 @@ int main(int argc, const char** argv)
 		cout << "Error" << endl; // Make proper error
 		exit(1);
 	}
+
+	myfile.close();
+
+
 
  }
 
@@ -147,9 +164,6 @@ int exp2(int inp)		// implements right-recursive form to get our 'inp' by
 			result = exp2(result + term()); //handles t+t
 		else if (a == '-')
 			result = exp2(result - term()); //handles t-t
-		else if (a == ')')
-			indexx--;		// if none of these, we go back one step
-
 
 	}
 	return result;
@@ -207,7 +221,7 @@ int fact2(int inp)
 		{
 			result = fact2(pow(result, fact()));  // Correctly handle right-associative
 		}
-		else if (a == ')' || a == '*' || a == '/' || a == '+' || a == '-')
+		else
 			indexx--;  // Step back if not '^'
 
 	}
@@ -217,46 +231,43 @@ int fact2(int inp)
 
 int Num()
 {
-
-	char a = prog.at(indexx++);
-	while (a == ' ' && (indexx < prog.length()))
+	if (indexx < prog.length())
 	{
-		a = prog.at(indexx++);
-	}
-
-	if (a == '(')			// if left parantheses at indexx
-	{
-		//indexx++;					// we incremenet to get next char
-		int result = exp();			// keep result of exp() in result
-		if (prog.at(indexx) == ')')	// checks to see if the indexx is sitting at right parantheses
+		char a = prog.at(indexx++);
+		while (a == ' ' && (indexx < prog.length()))
 		{
-			indexx++;				// if so, we increment to next char
-		}
-		return result;				// we return result to fact2() which is nested in term2()
-
-	}
-
-	if (isdigit(a))
-	{
-	
-
-		int num = a - '0';  // using ascii values to get num
-		
-		while (indexx < prog.length() && isdigit(prog.at(indexx)))
-		{
-
-			num = num * 10 + (prog.at(indexx++) - '0');  // Multiplying our initial num by 10 to move numbers place
-			//cout << num << endl;
-
+			a = prog.at(indexx++);
 		}
 
-		return num;  // Return the multi-digit number
-	}
+		if (a == '(')			// if left parantheses at indexx
+		{
+			return exp();
+		}
+
+		if (isdigit(a))
+		{
+
+			int num = a - '0';  // using ascii values to get num
+
+			while (indexx < prog.length() && isdigit(prog.at(indexx)))
+			{
+
+				a = prog.at(indexx++);	// moving to next char
+				num = num * 10 + (a - '0');  // Multiplying our initial num by 10 to move numbers place
+				// as well as getting ascii value of next char
+				//cout << num << endl;
+
+			}
+
+			return num;  // Return the multi-digit number
+		}
+
+		return atoi(&a);
+
+	} // End of indexx < prog.length()
 
 
 
-
-	return atoi(&a);
 
 
 }
