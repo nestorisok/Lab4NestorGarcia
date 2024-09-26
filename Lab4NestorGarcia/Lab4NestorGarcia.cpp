@@ -24,15 +24,19 @@ int exp(), term(), fact(), exp2(int), term2(int), fact2(int), Num();
 
 void wordFound(string);
 
-void Declarations();
-void Declaration(string);
+void Declarations(), Declaration(string);
 
-void myWord();
+void Statements(), Statement(string);
+
+void print_st(), assign_st(string);
+
+
+string myWord();
 int myChar();
 
 
 string prog,tempString;
-string curWord; //string for reading 1-line input expression (program)
+//string curWord; //string for reading 1-line input expression (program)
 
 
 int indexx = 0; //global index for program string
@@ -47,7 +51,13 @@ struct symbolTable
 	string type;
 	int val;
 	
-	symbolTable();
+	symbolTable()	// Constructor for our symbol table
+	{
+		// Defaults
+		id = '0';
+		type = "EMPTY";
+		val = -1;
+	}
 
 };
 unordered_map<int, symbolTable> myTable;
@@ -87,7 +97,7 @@ int main(int argc, const char** argv)
 	{
 		prog += tempString + ' '; // fix this
 	}
-
+	prog.pop_back();
 	////getline(myfile, tempString);   //read one line  
 	////while (!myfile.eof())
 	////{
@@ -95,10 +105,11 @@ int main(int argc, const char** argv)
 	////	getline(myfile, tempString); //read next line
 	////}
 
-	myWord();
+	string curWord = myWord();
 	if (curWord == "program")
 	{
 		Declarations();
+		Statements();
 	}
 	else
 	{
@@ -275,71 +286,194 @@ int Num()
 
 void Declarations()
 {
-	myWord();
-	if (curWord == "begin")
+	if (indexx < prog.length())
 	{
-		exit(1);
-	}
-	else if (curWord == "int" || curWord == "double")
-	{
-		Declaration(curWord);
-	}
+		string curWord = myWord();
+		if (curWord == "begin")
+		{
+			return; // was exit(1)
+		}
+		else if (curWord == "int" || curWord == "double")
+		{
+			Declaration(curWord);
+		}
 
-	Declarations();
+		Declarations();
+	}
 }
 
 void Declaration(string inpWord) 
 {
-	string varType = inpWord;
-
-
-	char curChar = prog.at(indexx++);
-	while (curChar == ' ' && (indexx < prog.length()))
+	if (indexx < prog.length())
 	{
-		curChar = prog.at(indexx++);
+		string varType = inpWord;
+
+		char curChar = prog.at(indexx++);
+		while (curChar == ' ' && (indexx < prog.length()))
+		{
+			curChar = prog.at(indexx++);
+		}
+
+		myTable[tableIn].id = curChar;
+		myTable[tableIn].type = varType;
+		tableIn++;
+
+		curChar = prog.at(indexx++);				// able to skip spaces between variable names
+		while (curChar == ' ' && (indexx < prog.length()))
+		{
+			curChar = prog.at(indexx++);
+		}
+		if (curChar == ',')
+		{
+			Declaration(varType);
+
+		}
+		else if (curChar == ';')
+		{
+			return; // was exit(1)
+		}
 	}
-
-	myTable[tableIn].id = curChar;
-	myTable[tableIn].type = varType;
-	tableIn++;
-
-	if (prog.at(indexx++) == ',')
-	{
-		Declaration(varType);
-
-	}
-	else if (prog.at(indexx++) == ';')
-	{
-		exit(1);
-	}
-
 }
 
 
-void myWord()
+
+void Statements()
 {
-
-	//char a = prog.at(indexx++);
-	
-	string tempString;
-
-	while (prog.at(indexx) == ' ' && (indexx < prog.length()))
+	if (indexx < prog.length())
 	{
-		indexx++;
-	}
-
-	if (isalpha(prog.at(indexx)))
-	{
-		while (indexx < prog.length() && isalpha(prog.at(indexx)))
+		string curWord = myWord();
+		if (curWord == "end")
 		{
+			return;
+		}
+		else
+			Statement(curWord);
 
-			tempString += prog.at(indexx++);  // Multiplying our initial num by 10 to move numbers place
-			//cout << num << endl;
+		Statements();
+	}
+}
+
+
+void Statement(string inpStr)
+{
+	if (indexx < prog.length())
+	{
+		string curWord = inpStr;
+
+		if (curWord == "print")
+		{
+			print_st();
+		}
+		else
+		{
+			assign_st(curWord);
+		}
+	}
+}
+
+void print_st()
+{
+	if (indexx < prog.length())
+	{
+		char id = prog.at(indexx++);
+		while (id == ' ' && (indexx < prog.length()))
+		{
+			id = prog.at(indexx++);
+		}
+
+		if (isalpha(id))
+		{
+			for (int i = 0; i < myTable.size(); i++)  // use itr to search through table unordered map
+			{
+				if (myTable[i].id == id)
+				{
+					cout << myTable[i].val << endl;
+				}
+
+				else
+				{
+					cout << "**** SEMANTIC ERROR ****" << endl;
+				}
+			}
 
 		}
-		curWord = tempString;
+		else
+		{
+			indexx--;
+			cout << exp() << endl;
+		}
 	}
+}
+/**** ^ Works ^ ****/
 
+/**** issues here *****/
+void assign_st(string inpID)
+{
+	if (indexx < prog.length())
+	{
+
+		char tempCh = inpID.at(0);
+
+
+		char curCh = prog.at(indexx++);
+		while (curCh == ' ' && (indexx < prog.length()))
+		{
+			curCh = prog.at(indexx++);
+		}
+
+		if (curCh == '=')
+		{
+			int temp = exp();
+
+			for (int i = 0; i < myTable.size(); i++)
+			{
+				if (myTable[i].id == tempCh)
+				{
+					myTable[i].val = temp;
+				}
+
+				else
+				{
+					cout << "**** SEMANTIC ERROR ****" << endl;
+				}
+			}
+		}
+		else
+		{
+			cout << "**** SYNTAX ERROR ****" << endl;
+		}
+	}
+}
+
+
+
+
+string myWord()
+{
+
+
+	//char a = prog.at(indexx++);
+	if (indexx < prog.length())
+	{
+		string tempString;
+
+		while (prog.at(indexx) == ' ' && (indexx < prog.length()))
+		{
+			indexx++;
+		}
+
+		if (isalpha(prog.at(indexx)))
+		{
+			while (indexx < prog.length() && isalpha(prog.at(indexx)))
+			{
+
+				tempString += prog.at(indexx++);  // Multiplying our initial num by 10 to move numbers place
+				//cout << num << endl;
+
+			}
+			return tempString;
+		}
+	}
 
 }
 
@@ -359,10 +493,3 @@ int myChar()
 }
 
 /****************************************************************/
-symbolTable::symbolTable()	// Constructor for our symbol table
-{
-	// Defaults
-	id = '0';
-	type = "EMPTY";
-	val = -1;
-}
