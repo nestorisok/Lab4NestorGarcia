@@ -375,20 +375,21 @@ void print_st()
 {
 	if (indexx < prog.length())
 	{
-		char id = prog.at(indexx++);
-		while (id == ' ' && (indexx < prog.length()))
+		char tempID = prog.at(indexx++);
+		while (tempID == ' ' && (indexx < prog.length()))
 		{
-			id = prog.at(indexx++);
+			tempID = prog.at(indexx++);
 		}
 
-		if (isalpha(id))
+		if (isalpha(tempID))
 		{
-			for (int i = 0; i < myTable.size(); i++)  // use itr to search through table unordered map
-			{
-				if (myTable[i].id == id)
+				for (auto itr = myTable.begin(); itr != myTable.end(); itr++)
 				{
-					cout << myTable[i].val << endl;
-				}
+					
+					if (itr->second.id == tempID)
+					{
+						cout << itr->second.val << endl;
+					}
 
 				else
 				{
@@ -412,7 +413,7 @@ void assign_st(string inpID)
 	if (indexx < prog.length())
 	{
 
-		char tempCh = inpID.at(0);
+		char tempID = inpID.at(0);
 
 
 		char curCh = prog.at(indexx++);
@@ -425,11 +426,12 @@ void assign_st(string inpID)
 		{
 			int temp = exp();
 
-			for (int i = 0; i < myTable.size(); i++)
+			for (auto itr = myTable.begin(); itr != myTable.end(); itr++)
 			{
-				if (myTable[i].id == tempCh)
+				
+				if (itr->second.id == tempID)
 				{
-					myTable[i].val = temp;
+					itr->second.val = temp;
 				}
 
 				else
