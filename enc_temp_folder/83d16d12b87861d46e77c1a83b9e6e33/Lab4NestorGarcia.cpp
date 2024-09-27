@@ -432,7 +432,7 @@ void assign_st(string inpID)
 		}
 		//string curWord = myWord();	// goto next char only
 
-		if (curChar == '=') // Handle if next char is an ID
+		if (curChar == '=')
 		{
 			int expRes = exp();
 
@@ -456,7 +456,7 @@ void assign_st(string inpID)
 			cout << "**** SEMANTIC ERROR ****" << endl;
 			}
 		}
-		
+
 
 		else
 		{
