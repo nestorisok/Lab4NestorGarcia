@@ -432,7 +432,7 @@ void assign_st(string inpID)
 		}
 		//string curWord = myWord();	// goto next char only
 
-		if (curChar == '=') // Handle if next char is an ID
+		if (curChar == '=') // Handle if next char is an ID here
 		{
 			int expRes = exp();
 
