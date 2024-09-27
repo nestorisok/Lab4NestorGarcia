@@ -359,7 +359,6 @@ void Statement(string inpStr)
 	if (indexx < prog.length())
 	{
 		string curWord = inpStr;
-
 		if (curWord == "print")
 		{
 			print_st();
@@ -375,28 +374,36 @@ void print_st()
 {
 	if (indexx < prog.length())
 	{
-		char tempID = prog.at(indexx++);
-		while (tempID == ' ' && (indexx < prog.length()))
+		int tempIND;
+		char myID = prog.at(indexx++);
+		while (myID == ' ' && (indexx < prog.length()))
 		{
-			tempID = prog.at(indexx++);
+			myID = prog.at(indexx++);
 		}
 
-		if (isalpha(tempID))
+		if (isalpha(myID))
 		{
-				for (auto itr = myTable.begin(); itr != myTable.end(); itr++)
-				{
-					
-					if (itr->second.id == tempID)
-					{
-						cout << itr->second.val << endl;
-					}
+			for (auto itr = myTable.begin(); itr != myTable.end(); itr++)
+			{
 
-				else
+				if (itr->second.id == myID)
 				{
-					cout << "**** SEMANTIC ERROR ****" << endl;
+					tempIND = itr->first; // Gets index of value
+					//itr->second.val = temp;
 				}
+
+
 			}
 
+			if (myTable[tempIND].id == myID)
+			{
+				cout << myTable[tempIND].val << endl;
+			}
+			else
+			{
+			cout << "**** SEMANTIC ERROR ****" << endl;
+			}
+		
 		}
 		else
 		{
@@ -413,33 +420,43 @@ void assign_st(string inpID)
 	if (indexx < prog.length())
 	{
 
-		char tempID = inpID.at(0);
+		string myID = inpID;
+		int tempIND;
+	
 
-
-		char curCh = prog.at(indexx++);
-		while (curCh == ' ' && (indexx < prog.length()))
+		char curChar = prog.at(indexx++);
+		while (curChar == ' ' && (indexx < prog.length()))
 		{
-			curCh = prog.at(indexx++);
+			curChar = prog.at(indexx++);
 		}
+		//string curWord = myWord();	// goto next char only
 
-		if (curCh == '=')
+		if (curChar == '=')
 		{
-			int temp = exp();
+			int expRes = exp();
 
 			for (auto itr = myTable.begin(); itr != myTable.end(); itr++)
 			{
 				
-				if (itr->second.id == tempID)
+				if (itr->second.id == myID.at(0))
 				{
-					itr->second.val = temp;
+					tempIND = itr->first; // Gets index of value
+					//itr->second.val = temp;
 				}
 
-				else
-				{
-					cout << "**** SEMANTIC ERROR ****" << endl;
-				}
+			}
+			
+			if (myTable[tempIND].id == myID.at(0))
+			{
+				myTable[tempIND].val = expRes;
+			}
+			else
+			{
+			cout << "**** SEMANTIC ERROR ****" << endl;
 			}
 		}
+
+
 		else
 		{
 			cout << "**** SYNTAX ERROR ****" << endl;
@@ -453,31 +470,58 @@ void assign_st(string inpID)
 string myWord()
 {
 
-
-	//char a = prog.at(indexx++);
 	if (indexx < prog.length())
 	{
+
 		string tempString;
 
 		while (prog.at(indexx) == ' ' && (indexx < prog.length()))
 		{
+
 			indexx++;
 		}
 
-		if (isalpha(prog.at(indexx)))
+		while (indexx < prog.length() && isalpha(prog.at(indexx)))
 		{
-			while (indexx < prog.length() && isalpha(prog.at(indexx)))
-			{
 
-				tempString += prog.at(indexx++);  // Multiplying our initial num by 10 to move numbers place
-				//cout << num << endl;
-
-			}
-			return tempString;
+			tempString += prog.at(indexx++);  // Multiplying our initial num by 10 to move numbers place
+			//cout << num << endl;
+			
 		}
-	}
 
+		return tempString;
+	}
 }
+
+
+
+
+////string myWord()
+////{
+////
+////
+////	//char a = prog.at(indexx++);
+////	
+////		string tempString;
+////
+////		while (prog.at(indexx) == ' ' && (indexx < prog.length()))
+////		{
+////			indexx++;
+////		}
+////
+////		if (isalpha(prog.at(indexx)))
+////		{
+////			while (indexx < prog.length() && isalpha(prog.at(indexx)))
+////			{
+////
+////				tempString += prog.at(indexx++);  // Multiplying our initial num by 10 to move numbers place
+////				//cout << num << endl;
+////
+////			}
+////			return tempString;
+////		}
+////	
+////}
 
 
 
