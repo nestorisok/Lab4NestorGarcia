@@ -93,7 +93,7 @@ int main(int argc, const char** argv)
 	
 	myfile.open("myProg.txt");
 	//getline(myfile, s1);
-	while (getline(myfile, tempString))
+	while (getline(myfile, tempString))	// change how it is interpreted, not input file
 	{
 		prog += tempString + ' '; // fix this
 	}
@@ -434,6 +434,16 @@ void assign_st(string inpID)
 
 		if (curChar == '=') // Handle if next char is an ID here
 		{
+
+			if (isalpha(prog.at(indexx++)))
+			{
+				// make id.value = id2.value
+				// search for id at prog.at(indexx++);
+				// make id1.val = id2.val
+
+				// maybe try iteratiing method from below
+			}
+
 			int expRes = exp();
 
 			for (auto itr = myTable.begin(); itr != myTable.end(); itr++)
