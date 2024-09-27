@@ -434,39 +434,61 @@ void assign_st(string inpID)
 
 		if (curChar == '=') // Handle if next char is an ID here
 		{
-
-			if (isalpha(prog.at(indexx++)))
+			
+			char nextCh = prog.at(indexx++);
+			while (nextCh == ' ' && (indexx < prog.length()))
 			{
-				// make id.value = id2.value
+				nextCh = prog.at(indexx++);
+			}
+
+			if (isalpha(nextCh))
+			{
+				for (auto itr = myTable.begin(); itr != myTable.end(); itr++)
+				{
+					if (itr->second.id == nextCh)
+					{
+						tempIND = itr->first;
+					}
+
+				}
+
+				if (myTable[tempIND].id == nextCh)
+				{
+					myTable[tempIND].val
+				}
+
+				// make id1.value = id2.value
 				// search for id at prog.at(indexx++);
 				// make id1.val = id2.val
 
 				// maybe try iteratiing method from below
 			}
 
-			int expRes = exp();
-
-			for (auto itr = myTable.begin(); itr != myTable.end(); itr++)
-			{
-				
-				if (itr->second.id == myID.at(0))
-				{
-					tempIND = itr->first; // Gets index of value
-					//itr->second.val = temp;
-				}
-
-			}
-			
-			if (myTable[tempIND].id == myID.at(0))
-			{
-				myTable[tempIND].val = expRes;
-			}
 			else
 			{
-			cout << "**** SEMANTIC ERROR ****" << endl;
+				int expRes = exp();
+
+				for (auto itr = myTable.begin(); itr != myTable.end(); itr++)
+				{
+
+					if (itr->second.id == myID.at(0))
+					{
+						tempIND = itr->first; // Gets index of value
+						//itr->second.val = temp;
+					}
+
+				}
+
+				if (myTable[tempIND].id == myID.at(0))
+				{
+					myTable[tempIND].val = expRes;
+				}
+				else
+				{
+					cout << "**** SEMANTIC ERROR ****" << endl;
+				}
 			}
 		}
-		
 
 		else
 		{
