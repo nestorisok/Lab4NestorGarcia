@@ -422,7 +422,8 @@ void assign_st(string inpID)
 	{
 
 		string myID = inpID;
-		int tempIND;
+		int idIND;
+		int nextIND;
 	
 
 		char curChar = prog.at(indexx++);
@@ -447,16 +448,25 @@ void assign_st(string inpID)
 				{
 					if (itr->second.id == nextCh)
 					{
-						tempIND = itr->first;
+						nextIND = itr->first;
+					}
+					if (itr->second.id == myID.at(0))
+					{
+						idIND = itr->first; // Gets index of value
+						//itr->second.val = temp;
 					}
 
 				}
 
-				if (myTable[tempIND].id == nextCh)
+				if (myTable[nextIND].id == nextCh)
 				{
-					myTable[tempIND].val
-				}
+					myTable[idIND].val = myTable[nextIND].val;
 
+				}
+				else
+				{
+					cout << "**** SEMANTIC ERROR ****" << endl;
+				}
 				// make id1.value = id2.value
 				// search for id at prog.at(indexx++);
 				// make id1.val = id2.val
@@ -466,6 +476,7 @@ void assign_st(string inpID)
 
 			else
 			{
+				indexx--;
 				int expRes = exp();
 
 				for (auto itr = myTable.begin(); itr != myTable.end(); itr++)
@@ -473,15 +484,15 @@ void assign_st(string inpID)
 
 					if (itr->second.id == myID.at(0))
 					{
-						tempIND = itr->first; // Gets index of value
+						idIND = itr->first; // Gets index of value
 						//itr->second.val = temp;
 					}
 
 				}
 
-				if (myTable[tempIND].id == myID.at(0))
+				if (myTable[idIND].id == myID.at(0))
 				{
-					myTable[tempIND].val = expRes;
+					myTable[idIND].val = expRes;
 				}
 				else
 				{
@@ -508,7 +519,7 @@ string myWord()
 
 		string tempString;
 
-		while (prog.at(indexx) == ' ' && (indexx < prog.length()))
+		while ((prog.at(indexx) == ' ' || prog.at(indexx) == ';') && (indexx < prog.length()))
 		{
 
 			indexx++;
