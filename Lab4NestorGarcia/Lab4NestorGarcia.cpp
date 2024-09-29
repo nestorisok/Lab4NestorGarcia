@@ -11,7 +11,6 @@
 #include <vector>
 #include <fstream> // file reading
 #include <unordered_map>
-#include <sstream>
 
 
 using namespace std;
@@ -288,7 +287,7 @@ void Declarations()
 {
 	if (indexx < prog.length())
 	{
-		string curWord = myWord();
+		string curWord = myWord();	// reads next word
 		if (curWord == "begin")
 		{
 			return; // was exit(1)
@@ -314,21 +313,21 @@ void Declaration(string inpWord)
 			curChar = prog.at(indexx++);
 		}
 
-		myTable[tableIn].id = curChar;
-		myTable[tableIn].type = varType;
+		myTable[tableIn].id = curChar;	// make the id the current char, in this case ID
+		myTable[tableIn].type = varType;	// the var type of this char, is our input word
 		tableIn++;
 
-		curChar = prog.at(indexx++);				// able to skip spaces between variable names
-		while (curChar == ' ' && (indexx < prog.length()))
+		curChar = prog.at(indexx++);				// iterates to next character
+		while (curChar == ' ' && (indexx < prog.length())) // skips spaces
 		{
 			curChar = prog.at(indexx++);
 		}
-		if (curChar == ',')
+		if (curChar == ',')	// if next character is a comma, recursively call declaration
 		{
 			Declaration(varType);
 
 		}
-		else if (curChar == ';')
+		else if (curChar == ';')	// if next character a semicolon, exit
 		{
 			return; // was exit(1)
 		}
@@ -383,27 +382,38 @@ void print_st()
 
 		if (isalpha(myID))
 		{
-			for (auto itr = myTable.begin(); itr != myTable.end(); itr++)
+			char nextCh = prog.at(indexx++);
+			while (nextCh == ' ' && (indexx < prog.length()))
 			{
-
-				if (itr->second.id == myID)
+				nextCh = prog.at(indexx++);
+			}
+			if (nextCh == ';')
+			{
+				for (auto itr = myTable.begin(); itr != myTable.end(); itr++)
 				{
-					tempIND = itr->first; // Gets index of value
-					//itr->second.val = temp;
+
+					if (itr->second.id == myID)
+					{
+						tempIND = itr->first; // Gets index of value
+						//itr->second.val = temp;
+					}
+
+
 				}
 
-
-			}
-
-			if (myTable[tempIND].id == myID)
-			{
-				cout << myTable[tempIND].val << endl;
+				if (myTable[tempIND].id == myID)
+				{
+					cout << myTable[tempIND].val << endl;
+				}
+				else
+				{
+					cout << "**** SEMANTIC ERROR ****" << endl;
+				}
 			}
 			else
 			{
-			cout << "**** SEMANTIC ERROR ****" << endl;
+				cout << "**** SEMANTIC ERROR ****" << endl;
 			}
-		
 		}
 		else
 		{
@@ -421,7 +431,7 @@ void assign_st(string inpID)
 	if (indexx < prog.length())
 	{
 
-		string myID = inpID;
+		char myID = inpID.at(0); // input id
 		int idIND;
 		int nextIND;
 	
@@ -431,9 +441,8 @@ void assign_st(string inpID)
 		{
 			curChar = prog.at(indexx++);
 		}
-		//string curWord = myWord();	// goto next char only
 
-		if (curChar == '=') // Handle if next char is an ID here
+		if (curChar == '=') // Handles if char is =
 		{
 			
 			char nextCh = prog.at(indexx++);
@@ -442,19 +451,20 @@ void assign_st(string inpID)
 				nextCh = prog.at(indexx++);
 			}
 
-			if (isalpha(nextCh))
+			if (isalpha(nextCh))	// checks to see if nextCh is an id(char)
 			{
 				for (auto itr = myTable.begin(); itr != myTable.end(); itr++)
 				{
-					if (itr->second.id == nextCh)
-					{
-						nextIND = itr->first;
-					}
-					if (itr->second.id == myID.at(0))
+					if (itr->second.id == myID)	// searches for index of left side ID
 					{
 						idIND = itr->first; // Gets index of value
 						//itr->second.val = temp;
 					}
+					if (itr->second.id == nextCh)	// searches for a matching ID in the symbol table for right side
+					{
+						nextIND = itr->first;
+					}
+
 
 				}
 
@@ -467,11 +477,6 @@ void assign_st(string inpID)
 				{
 					cout << "**** SEMANTIC ERROR ****" << endl;
 				}
-				// make id1.value = id2.value
-				// search for id at prog.at(indexx++);
-				// make id1.val = id2.val
-
-				// maybe try iteratiing method from below
 			}
 
 			else
@@ -482,7 +487,7 @@ void assign_st(string inpID)
 				for (auto itr = myTable.begin(); itr != myTable.end(); itr++)
 				{
 
-					if (itr->second.id == myID.at(0))
+					if (itr->second.id == myID)	// searches for a matching id using iterators
 					{
 						idIND = itr->first; // Gets index of value
 						//itr->second.val = temp;
@@ -490,9 +495,9 @@ void assign_st(string inpID)
 
 				}
 
-				if (myTable[idIND].id == myID.at(0))
+				if (myTable[idIND].id == myID)	// using found index, the result of exp
 				{
-					myTable[idIND].val = expRes;
+					myTable[idIND].val = expRes;		// is made that id's value
 				}
 				else
 				{
@@ -536,36 +541,6 @@ string myWord()
 		return tempString;
 	}
 }
-
-
-
-
-////string myWord()
-////{
-////
-////
-////	//char a = prog.at(indexx++);
-////	
-////		string tempString;
-////
-////		while (prog.at(indexx) == ' ' && (indexx < prog.length()))
-////		{
-////			indexx++;
-////		}
-////
-////		if (isalpha(prog.at(indexx)))
-////		{
-////			while (indexx < prog.length() && isalpha(prog.at(indexx)))
-////			{
-////
-////				tempString += prog.at(indexx++);  // Multiplying our initial num by 10 to move numbers place
-////				//cout << num << endl;
-////
-////			}
-////			return tempString;
-////		}
-////	
-////}
 
 
 

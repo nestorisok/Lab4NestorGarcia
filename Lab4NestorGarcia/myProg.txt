@@ -1,14 +1,12 @@
 program
-int x, y, z, t;
-double result;
+int a, b, c;
+double d;
 begin
-x = 3 * (10 + 15);
-y = (22 + 5) * 40;
-t = 53+35+2;
-z = x;
-print x;
-print y;
-print t;
-print z;
-print (5 + 150 / 3) * 5 + 3^4;
+a = 2*(55+200);
+b = (31 + 4) * 50;
+c = a;
+print a;
+print b;
+print c;
+print (2+300/ 2)*4 + 2^3;
 end
