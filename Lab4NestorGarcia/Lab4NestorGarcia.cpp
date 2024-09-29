@@ -387,6 +387,7 @@ void print_st()
 			{
 				nextCh = prog.at(indexx++);
 			}
+
 			if (nextCh == ';')
 			{
 				for (auto itr = myTable.begin(); itr != myTable.end(); itr++)
@@ -414,6 +415,7 @@ void print_st()
 			{
 				cout << "**** SEMANTIC ERROR ****" << endl;
 			}
+
 		}
 		else
 		{
