@@ -104,6 +104,12 @@ int main(int argc, const char** argv)
 	////	getline(myfile, tempString); //read next line
 	////}
 
+
+	// something line myWord(string input), reads word and returns// update prog each iteration?
+	// getline(myfile, prog)
+	// curWord = myWord;
+	// wholeProg += prog;
+	// getline(myfile, prog)
 	string curWord = myWord();
 	if (curWord == "program")
 	{
@@ -522,7 +528,7 @@ void assign_st(string inpID)
 string myWord()
 {
 
-	if (indexx < prog.length())
+	if (indexx < prog.length()) // local
 	{
 
 		string tempString;
