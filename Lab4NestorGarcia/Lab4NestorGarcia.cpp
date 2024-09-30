@@ -422,6 +422,7 @@ void print_st()
 			indexx--;
 			int expRes = exp();
 			cout << expRes << endl;
+
 		}
 	}
 }
